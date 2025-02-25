@@ -1,5 +1,5 @@
 let strWriteFruit = () => {
-  console.log(("b"+"a"+ +"a"+".").toLowerCase());
+  console.log("banan.");
 };
 
 strWriteFruit();
