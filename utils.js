@@ -1,5 +1,5 @@
 /*-----------------1-------------------*/
-const ob = {a: 3, b: {c: 7}}
+const ob = {a: 3, b: {c: 7}};
 
 function deepCopy (obj) {
     return JSON.parse(JSON.stringify(obj));
@@ -66,5 +66,84 @@ function reverseStr(str) {
   revstr = [...str].reverse().join("");
   console.log(revstr);
 }
-let str = "abcde"
+let str = "abcde";
 reverseStr(str);
+
+/*-----------------hw5-------------------*/
+/*-----------------5-------------------*/
+console.log("-----------5---------");
+function memoize(callback) {
+  const cache = {};
+  
+  return function(...args) {
+      const key = JSON.stringify(args.sort((a,b)=>a-b));//+сортировка ключа перед записью+
+      console.log(key);
+      console.log('cache before ', cache);
+
+      if (cache[`${key}`] !== undefined) {
+          console.log('Get from cache');
+          return cache[`${key}`];
+      }
+
+      console.log('First calculation');
+      const result = callback(...args);
+      cache[`${key}`] = result;
+      console.log('cache after ', cache);
+
+      return result;
+  }
+}
+function sum(a,b,c,d){
+  return a + b + c + d;
+};
+
+let fun = memoize(sum);
+console.log(fun(3,5,1,2));
+console.log(fun(5,3,2,1));
+console.log(fun(1,3,5,2));
+console.log(fun(3,2,1,5));
+console.log("-----------5---------");
+/*-----------------6-------------------*/
+let add=(a)=>(b)=>{
+  if(b === undefined){
+    return (`add: ${a}`);
+  }
+  return add(`${a}`+b);
+}
+console.log(add(5)(2)(3)(4)());
+
+/*-----------------7-------------------*/
+function logger(call) {
+  console.log(`${call}: I output only external context: ${this.item}`);
+}
+
+const obj = { item: "some value" };
+logger.call(obj,"call");
+logger.apply(obj,["apply"]);
+logger.bind(obj,"bind")();
+/*-----------------8-------------------*/
+let objtest = {res:10};
+
+Function.prototype.BINDt = function(context, ...args) {
+  const originalFunc = this;
+  return function() {
+    return originalFunc.apply(context, args);
+  };
+};
+
+function BIND(callback,context,...args) {
+  return function() {
+    return (callback.apply(context, args));
+  }
+}
+
+function sumtest(a){
+  console.log(a.reduce((accum,current) => accum + current, this.res));
+}
+
+sumtest.BINDt(objtest,[5,3])();
+BIND(sumtest,objtest,[5,3])();
+sumtest.bind(objtest,[5,3])();
+
+/*-----------------hw6-------------------*/
+/*-----------------9-------------------*/
